@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -29,18 +29,29 @@ import Dashboard from './src/screen/dashboard';
 import {NavigationContainer} from '@react-navigation/native';
 import Tabs from './src/components/tabs';
 import Login from './src/screen/login';
+import Register from './src/screen/register';
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const [isSignedIn, setIsSignedIn] = useState(false);
-  console.log(isSignedIn, ' isSignedIn');
+  const [haveAccount, setHaveAccount] = useState(true);
+  const [createAccountSuccess, setCreateAccountSuccess] = useState(false);
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   return (
     <NavigationContainer>
-      {isSignedIn ? <Tabs /> : <Login setIsSignedIn={setIsSignedIn} />}
+      {isSignedIn && haveAccount ? (
+        <Tabs />
+      ) : haveAccount ? (
+        <Login setIsSignedIn={setIsSignedIn} setHaveAccount={setHaveAccount} />
+      ) : (
+        <Register
+          setHaveAccount={setHaveAccount}
+          setCreateAccountSuccess={setCreateAccountSuccess}
+        />
+      )}
     </NavigationContainer>
   );
 }
